@@ -24,4 +24,14 @@ public class PostLike {
     this.userId = userId;
   }
 
+
+  @Override
+  public String toString() {
+    return "PostLike{" +
+            "postId=" + postId +
+            ", userId=" + userId +
+            '}';
+  }
 }
+
+

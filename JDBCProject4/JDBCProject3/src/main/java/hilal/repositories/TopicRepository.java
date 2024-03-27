@@ -33,19 +33,36 @@ public class TopicRepository {
 
         Statement selectStatement = getConnection().createStatement();
 
-
-        // return null if fails
-        return null;
+        String query = "SELECT name, slug " +
+                "FROM Topic " +
+                "WHERE id = " + id;
+        ResultSet resultSet = selectStatement.executeQuery(query);
+        Topic topic = new Topic();
+        while (resultSet.next()){
+            topic.setName(resultSet.getString("name"));
+            topic.setSlug(resultSet.getString("slug"));
+        }
+        if (topic != null) return topic;
+        else return null;
     }
 
     public List<Topic> read(Topic example) throws SQLException {
 
         Statement selectStatement = getConnection().createStatement();
+        List<Topic> topicList = new ArrayList<>();
+        String query = "SELECT name,slug " +
+                "FROM topic " +
+                "WHERE id = " + example.getId() ;
+        ResultSet result = selectStatement.executeQuery(query);
+        while (result.next()) {
+            Topic topic = new Topic();
+            topic.setName(result.getString("name"));
+            topic.setSlug(result.getString("slug"));
+            topicList.add(topic);
+        }
 
-        // add read statements here..
-
-        // return empty collection if fails
-        return Collections.emptyList();
+        if (!topicList.isEmpty())return topicList;
+        else return Collections.emptyList();
     }
 
     public List<Topic> read() throws SQLException {

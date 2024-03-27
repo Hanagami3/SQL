@@ -26,9 +26,10 @@ public class MainApp {
             System.out.println("No of records created: " + noOfRowsCreated);
 
 
-
         } catch (SQLException sqlException) {
             System.err.println("SQL EX: " + sqlException.getMessage());
         }
+
+
     }
 }

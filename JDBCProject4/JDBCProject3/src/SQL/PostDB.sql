@@ -1,6 +1,6 @@
 CREATE TABLE post
 (
-    id BIGINT,
+    id BIGINT AUTO_INCREMENT,
     userId BIGINT,
     title varchar(255),
     slug varchar(255),

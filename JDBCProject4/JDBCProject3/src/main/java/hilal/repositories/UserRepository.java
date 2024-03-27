@@ -36,13 +36,48 @@ public class UserRepository {
     public User read(long id) throws SQLException {
 
         Statement selectStatement = getConnection().createStatement();
-        // return null if fails
-        return null;
+
+        String query = "SELECT id, username, email, password " +
+                //", createdAt, updatedAt " +
+                "From user " +
+                "Where id = " + id;
+        ResultSet resultSet = selectStatement.executeQuery(query);
+        User user = new User();
+        while (resultSet.next()){
+            user.setId(resultSet.getLong("id"));
+            user.setUsername(resultSet.getString("username"));
+            user.setEmail(resultSet.getString("email"));
+            user.setPassword(resultSet.getString("password"));
+            //user.setCreatedAt(resultSet.getTimestamp("createdAt"));
+            //user.setUpdatedAt(resultSet.getTimestamp("updateAt"));
+        }
+
+        if (user != null) return user;
+        else return null;
     }
 
     public List<User> read(User example) throws SQLException {
 
-        return Collections.emptyList();
+        List<User> userList = new ArrayList<>();
+        Statement statement = getConnection().createStatement();
+
+        String query = "SELECT id, username, email, password " +
+                //", createdAt, updatedAt " +
+                "FROM user " +
+                "WHERE id = " + example.getId();
+        ResultSet resultSet = statement.executeQuery(query);
+        while (resultSet.next()){
+            User user = new User();
+            user.setId(resultSet.getLong("id"));
+            user.setUsername(resultSet.getString("username"));
+            user.setEmail(resultSet.getString("email"));
+            user.setPassword(resultSet.getString("password"));
+            //user.setCreatedAt(resultSet.getTimestamp("createdAt"));
+            //user.setUpdatedAt(resultSet.getTimestamp("updatedAt"));
+            userList.add(user);
+        }
+        if (!userList.isEmpty()) return userList;
+        else return Collections.emptyList();
     }
 
     public List<User> read() throws SQLException {
@@ -50,7 +85,9 @@ public class UserRepository {
         List<User> userList = new ArrayList<>();
         Statement selectStatement = getConnection().createStatement();
         // add read statements here..
-        String query = "SELECT id, username, email, password, created_at, updated_at FROM user";
+        String query = "SELECT id, username, email, password " +
+                //"createdAt, updatedAt " +
+                "FROM user";
 //        statement.executeQuery() -> read records from table
         ResultSet result = selectStatement.executeQuery(query);
         // Map each record from the result set to java object
@@ -61,8 +98,8 @@ public class UserRepository {
             user.setUsername(result.getString("username"));
             user.setEmail(result.getString("email"));
             user.setPassword(result.getString("password"));
-            user.setCreatedAt(result.getTimestamp("created_at"));
-            user.setUpdatedAt(result.getTimestamp("updated_at"));
+            //user.setCreatedAt(result.getTimestamp("createdAt"));
+            //user.setUpdatedAt(result.getTimestamp("updatedAt"));
             userList.add(user);
         }
 
@@ -105,9 +142,10 @@ public class UserRepository {
 
         deleteStatement.setInt(1, id);
 
-        return deleteStatement.executeUpdate();
-        // return false if fails
+        int result = deleteStatement.executeUpdate(query);
 
+        if (result > 0) return result;
+        else return -1;
     }
 
 }
